@@ -6,7 +6,8 @@ import axios from '../../../axios-orders';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
-import {purchaseBurger} from '../../../store/actions';
+import { purchaseBurger } from '../../../store/actions';
+import { checkValidity } from '../../../shared/utils';
 
 class ContactData extends Component {
     state = {
@@ -81,24 +82,6 @@ class ContactData extends Component {
         formIsValid: false
     }
 
-    checkValidity = (value, rules) => {
-        let isValid = true;
-
-        if (rules.required) {
-            isValid = value.trim() !== '' && isValid;
-        }
-        
-        if (rules.minLength) {
-            isValid = value.trim().length >= rules.minLength && isValid;
-        }
-        
-        if (rules.maxLength) {
-            isValid = value.trim().length <= rules.maxLength && isValid;
-        }
-
-        return isValid;
-    }
-
     orderHandler = (e) => {
         e.preventDefault();
         const formData = {};
@@ -118,7 +101,7 @@ class ContactData extends Component {
         const orderForm = { ...this.state.orderForm }
         const formElement = { ...orderForm[elementId] };
         formElement.value = event.target.value;
-        formElement.valid = this.checkValidity(event.target.value, formElement.validation);
+        formElement.valid = checkValidity(event.target.value, formElement.validation);
         formElement.touched = true;
         orderForm[elementId] = formElement;
 
